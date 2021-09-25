@@ -1,8 +1,50 @@
 import os
+import pyaudio
+import wave
 
 text = open("pasword.txt","r", encoding = 'UTF-8')
 ps = text.read()
 text.close()
+
+def inputaudio():
+    p = pyaudio.PyAudio()
+    for i in range(p.get_device_count()):
+        print(i, p.get_device_info_by_index(i)['name'])
+    
+    inddevice = int(input(">>>Введите индекс микрофона: "))
+    recsec = int(input(">>>Введите количество секунд: "))
+    namefile = str(input(">>>Введите имя файла: "))
+    
+    CHUNK = 1024
+    FORMAT = pyaudio.paInt16
+    CHANNELS = 2
+    RATE = 44100
+    RECORD_SECONDS = recsec
+    WAVE_OUTPUT_FILENAME = namefile
+    p = pyaudio.PyAudio()
+    stream = p.open(format=FORMAT,
+                    channels=CHANNELS,
+                    rate=RATE,
+                    input=True,
+                    input_device_index=inddevice, 
+                    frames_per_buffer=CHUNK)
+    print("* recording")
+    frames = []
+    for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+        data = stream.read(CHUNK)
+        frames.append(data)
+    print("* done recording")
+    stream.stop_stream()
+    stream.close()
+    p.terminate()
+    
+    wf = wave.open(WAVE_OUTPUT_FILENAME, 'wb')
+    wf.setnchannels(CHANNELS)
+    wf.setsampwidth(p.get_sample_size(FORMAT))
+    wf.setframerate(RATE)
+    wf.writeframes(b''.join(frames))
+    wf.close()
+    os.replace(namefile, "main/" + "muzic/" + namefile)
 
 def calc():
     operation = input('''
@@ -141,6 +183,10 @@ def main():
         
         while main == "calculator":
             calc()
+            break
+        
+        while main == "input audio":
+            inputaudio()
             break
         
         if main == "close":
