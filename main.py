@@ -1,11 +1,35 @@
 import os
-import pyaudio
+import pyaudio#https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyaudio https://www.youtube.com/watch?v=8DmM40QC1pc
 import wave
+from time import sleep
 
 text = open("pasword.txt","r", encoding = 'UTF-8')
 ps = text.read()
 text.close()
 
+def dfs():
+    print("самоуничтожение через:")
+    print("3")
+    sleep(1)
+    print("2")
+    sleep(1)
+    print("1")
+    sleep(1)
+    os.remove("main.py")
+
+def delete_file_system():
+    while True:
+        if ps == '0' + '\n':
+            dfs()
+            break
+        else:
+            nps = str(input(">>>Введите пароль: ")) + '\n'
+            if nps == ps:
+                dfs()
+                break
+            else:
+                print('Неверный пароль')
+            
 def inputaudio():
     p = pyaudio.PyAudio()
     for i in range(p.get_device_count()):
@@ -93,7 +117,7 @@ def deleteF():
     os.remove(way + name)
 
 def helpme():
-    print()
+    print("•text чтобы открыть текст\n•rename чтобы переименовать\n•createD чтобы создать директорию\n•createF чтобы создать текстовой файл\n•deleteD чтобы удалить директорию\n•deleteF чтобы удалить текстовой файл\n•ls чтобы посмотреть что начодится в директории\n•password чтобы изменить пароль\n•Delete pass чтобы удалить пароль\n•calculator чтобы открыть калькулятор\n•input audio чтобы записать аудио\n•close чтобы закрыть файловую систему")
 
 def createF():
     way = str(input(">>>Введите путь: "))
@@ -135,11 +159,13 @@ def text():
     text.close()
 
 def main():
+    print("Введите help для справки")
     while True:
         main = input(">>>")
     
         while main == "help":
             helpme()
+            break
         
         while main == "text":
             text()
@@ -187,6 +213,10 @@ def main():
         
         while main == "input audio":
             inputaudio()
+            break
+        
+        while main == "delete file system":
+            delete_file_system()
             break
         
         if main == "close":
