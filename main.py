@@ -148,17 +148,42 @@ def rename():
     os.rename("main/" + way + name, "main/"+ way + name2)
 
 def text():
-    way = str(input(">>>Введите путь: "))
-    text = open("main/" + way ,"r", encoding = 'UTF-8')
-    txt = text.read()
-    print(txt)
-    text.close()
-    text = open("main\\" + way ,"a", encoding = 'UTF-8')
-    textf = str(input(">>>Введите текст: "))
-    print(textf, file = text)
-    text.close()
+    while True:
+        print(">>>Для выхода введите exit")
+        cat = input(">>>Введите расширение:")
+        textf = "1"
+        if cat == "r":
+            way = str(input(">>>Введите путь: "))
+            text = open("main/" + way ,"r", encoding = 'UTF-8')
+            txt = text.read()
+            print(txt)
+        elif cat == "a":
+            way = str(input(">>>Введите путь: "))
+            text = open("main/" + way ,"r", encoding = 'UTF-8')
+            txt = text.read()
+            print(">>>Для выхода введите esc")
+            print(txt)
+            text.close()
+            while True:
+                textf = str(input(">>>Введите текст: "))
+                if textf == "esc":
+                    break
+                else:
+                    text = open("main\\" + way ,"a", encoding = 'UTF-8')
+                    print(textf, file = text)
+                    text.close()
+        elif cat == "w":
+            way = str(input(">>>Введите путь: "))
+            text = open("main\\" + way ,"w", encoding = 'UTF-8')
+            textf = str(input(">>>Введите текст: "))
+            print(textf, file = text)
+            text.close()
+        elif cat == "exit":
+            break
 
 def main():
+    print("/\     /\ ")
+    print("  • _ •  ")
     print("Введите help для справки")
     while True:
         main = input(">>>")
