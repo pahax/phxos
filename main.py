@@ -1,11 +1,36 @@
-import os
+import os, os.path, wave
 import pyaudio#https://www.lfd.uci.edu/~gohlke/pythonlibs/#pyaudio https://www.youtube.com/watch?v=8DmM40QC1pc
-import wave
 from time import sleep
+from PIL import Image
+
 
 text = open("pasword.txt","r", encoding = 'UTF-8')
 ps = text.read()
 text.close()
+
+def image():
+    while True:
+        qween = input(">>>Введите что сделать с файлом: ")
+        if qween == "open":
+            way ='main/' + str(input(">>>Введите путь: "))
+            name = str(input('>>>Введите название: '))
+            if os.path.exists("main/" + way) == True:
+                image = Image.open(way + name)
+                image.show()
+            else:
+                print("\n>>>Этого файла не существует\n")
+        elif qween == "convert":
+            way ='main/' + str(input(">>>Введите путь: "))
+            name = str(input('>>>Введите название: '))
+            tatras = Image.open(way + name)
+            tatras.save(way + str(input('>>>Введите название: ')), str(input('>>>Введите расширение: ')))
+            os.remove(way + name)
+        elif qween == "help":
+            print("asd")
+        elif qween == "esc":
+            break
+        else:
+            print("\n>>>Введите help для справки")
 
 def dfs():
     print("самоуничтожение через:")
@@ -70,31 +95,6 @@ def inputaudio():
     wf.close()
     os.replace(namefile, "main/" + "muzic/" + namefile)
 
-def calc():
-    operation = input('''
-    Пожалуйста, введите математическую операцию, которую вы хотели бы выполнить:
-    + для сложения
-    - для вычитания
-    * для умножения
-    / для деления
-    ''')
-    number_1 = int(input('>>>Введите своё первое число: '))
-    number_2 = int(input('>>>Введите своё второе число: '))
-    if operation == '+':
-        print('{} + {} = '.format(number_1, number_2))
-        print(number_1 + number_2)
-    elif operation == '-':
-        print('{} - {} = '.format(number_1, number_2))
-        print(number_1 - number_2)
-    elif operation == '*':
-        print('{} * {} = '.format(number_1, number_2))
-        print(number_1 * number_2)
-    elif operation == '/':
-        print('{} / {} = '.format(number_1, number_2))
-        print(number_1 / number_2)
-    else:
-        print('Вы ввели недействительный оператор, пожалуйста, запустите программу еще раз.')
-
 def password():
     text = open("pasword.txt" ,"w", encoding = 'UTF-8')
     textf = str(input(">>>Введите новый пароль: "))
@@ -154,30 +154,39 @@ def text():
         textf = "1"
         if cat == "r":
             way = str(input(">>>Введите путь: "))
-            text = open("main/" + way ,"r", encoding = 'UTF-8')
-            txt = text.read()
-            print(txt)
+            if os.path.exists("main/" + way) == True: 
+                text = open("main/" + way ,"r", encoding = 'UTF-8')
+                txt = text.read()
+                print(txt)
+            else:
+                print("\n>>>Этого файла не существует\n")
         elif cat == "a":
             way = str(input(">>>Введите путь: "))
-            text = open("main/" + way ,"r", encoding = 'UTF-8')
-            txt = text.read()
-            print(">>>Для выхода введите esc")
-            print(txt)
-            text.close()
-            while True:
-                textf = str(input(">>>Введите текст: "))
-                if textf == "esc":
-                    break
-                else:
-                    text = open("main\\" + way ,"a", encoding = 'UTF-8')
-                    print(textf, file = text)
-                    text.close()
+            if os.path.exists("main/" + way) == True:
+                text = open("main/" + way ,"r", encoding = 'UTF-8')
+                txt = text.read()
+                print(">>>Для выхода введите esc")
+                print(txt)
+                text.close()
+                while True:
+                    textf = str(input(">>>Введите текст: "))
+                    if textf == "esc":
+                        break
+                    else:
+                        text = open("main\\" + way ,"a", encoding = 'UTF-8')
+                        print(textf, file = text)
+                        text.close()
+            else:
+                print("\n>>>Этого файла не существует\n")
         elif cat == "w":
             way = str(input(">>>Введите путь: "))
-            text = open("main\\" + way ,"w", encoding = 'UTF-8')
-            textf = str(input(">>>Введите текст: "))
-            print(textf, file = text)
-            text.close()
+            if os.path.exists("main/" + way) == True: 
+                text = open("main\\" + way ,"w", encoding = 'UTF-8')
+                textf = str(input(">>>Введите текст: "))
+                print(textf, file = text)
+                text.close()
+            else:
+                print("\n>>>Этого файла не существует\n")
         elif cat == "exit":
             break
 
@@ -233,7 +242,7 @@ def main():
             break
         
         while main == "calculator":
-            calc()
+            os.system('python mm.py')
             break
         
         while main == "input audio":
@@ -242,6 +251,10 @@ def main():
         
         while main == "delete file system":
             delete_file_system()
+            break
+        
+        while main == "image":
+            image()
             break
         
         if main == "close":
